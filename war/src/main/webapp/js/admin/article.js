@@ -23,6 +23,8 @@
 admin.article = {
     // 当发文章，取消发布，更新文章时设置为 false。不需在离开编辑器时进行提示。
     isConfirm: true,
+    //自动保存草稿定时器
+    autoSaveDraftTimer : undefined,
     status: {
         id: undefined,
         isArticle: undefined,
@@ -401,6 +403,7 @@ admin.article = {
             } else {
                 admin.article.add(true);
             }
+            admin.article.clearDraftTimer();//发布后,关闭定时器
         });
         
         $("#saveArticle").click(function () {
@@ -424,6 +427,8 @@ admin.article = {
             kind: "simple",
             height: 200
         });
+        //初始化时,启动定时器
+        admin.article.autoSaveDraftTimer = setInterval("admin.article.saveDraft(false)", 1000*60);
     },
     
     /*
